@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "lib": ["esnext", "dom"],
+    "strictPropertyInitialization": false,
+    "sourceMap": true,
+    "strict": true,
+    "baseUrl": "./",
+    "rootDir": "src",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "experimentalDecorators": true
+  },
+  "include": ["src/index.ts"],
+  "exclude": ["node_modules"]
+}
