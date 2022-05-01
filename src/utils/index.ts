@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { stringify } from 'csv'
-import { serch, getChannels, getPlaylist } from '../api/index.js'
+import { serch, getChannels, getPlaylistItem } from '../api/index.js'
 import { ChannelsDetail } from '../types'
 
 const successWriteFile = () => {

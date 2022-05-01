@@ -1,12 +1,8 @@
 import fs from 'fs'
-import { serch, getChannels, getPlaylist } from './api/index.js'
+import { serch, getChannels, getPlaylistItem } from './api/index.js'
 import { ChannelsDetail } from './types/index.js'
 import { successWriteFile, addChannelUrl, createCSV } from './utils/index.js'
-
-import channelIdsJson from './res/channelIds.json' assert { type: 'json' }
-import filterdChannelsDetail from './res/filterdChannelsDetail.json' assert { type: 'json' }
-import filterdChannelsDetailAddYoutubeUrl from './res/addYoutubeUrl.json' assert { type: 'json' }
-import activeChannelsDetail from './res/activeChannelsDetail.json' assert { type: 'json' }
+// import channelDetail from './res/filterdChannelsDetail.json' assert { type: 'json' }
 
 /**
  * チャンネルIDを取得する
@@ -42,7 +38,7 @@ async function getChannelIds(query: string, write: boolean = false): Promise<str
     channelIds.push(...result.items.map((res: any) => res.id.channelId))
   })
 
-  write && fs.writeFile('/src/res/channelIds.json', JSON.stringify(channelIds), successWriteFile)
+  write && fs.writeFile('./src/res/channelIds.json', JSON.stringify(channelIds), successWriteFile)
 
   return channelIds
 }
@@ -73,7 +69,7 @@ async function getChannelsDetailFromIds(
     })
     .catch((err) => console.log(err))
 
-  write && fs.writeFile('src/res/channelsDetail.json', JSON.stringify(channelsDetail), successWriteFile)
+  write && fs.writeFile('./src/res/channelsDetail.json', JSON.stringify(channelsDetail), successWriteFile)
 
   const filteredChannelsDetail = channelsDetail.filter(filter)
 
@@ -87,9 +83,9 @@ async function getChannelsDetailFromIds(
     })
   })
 
-  write && fs.writeFile('src/res/filterdChannelsDetail.json', JSON.stringify(result), successWriteFile)
+  write && fs.writeFile('./src/res/filterdChannelsDetail.json', JSON.stringify(result), successWriteFile)
 
-  return addChannelUrl(result)
+  return result
 }
 
 async function checkIsActiveChannel(
@@ -100,7 +96,7 @@ async function checkIsActiveChannel(
   const uploadsPlaylistIds = filterdChannelsDetail.map((v) => v.uploadsPlaylistId)
   let activeChannels: any[] = []
 
-  await Promise.all(uploadsPlaylistIds.map(async (i) => getPlaylist(i, 'snippet,contentDetails'))).then(
+  await Promise.all(uploadsPlaylistIds.map(async (i) => getPlaylistItem(i, 'snippet,contentDetails'))).then(
     (playlistItems: any[]) => {
       activeChannels = playlistItems
         .filter((p) => new Date(p.items[0].contentDetails.videoPublishedAt) > new Date(limit))
@@ -118,7 +114,7 @@ async function checkIsActiveChannel(
       }
     })
   )
-  write && fs.writeFile('src/res/activeChannelsDetail.json', JSON.stringify(activeChannelsDetail), successWriteFile)
+  write && fs.writeFile('./src/res/activeChannelsDetail.json', JSON.stringify(activeChannelsDetail), successWriteFile)
 
   return activeChannelsDetail
 }
@@ -128,7 +124,7 @@ async function checkIsActiveChannel(
  */
 const Usecase = async (q = 'ホラー'): Promise<ChannelsDetail[]> => {
   const channelIds = await getChannelIds(q, true)
-  const channelsDetail = await getChannelsDetailFromIds(channelIds, subscriberMillionFilter)
+  const channelsDetail = await getChannelsDetailFromIds(channelIds, subscriberMillionFilter, true)
   const activeChannelsDetail = await checkIsActiveChannel(channelsDetail, '2022-03-31T00:00:00Z', true)
   const result = addChannelUrl(activeChannelsDetail)
   createCSV(result)

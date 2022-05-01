@@ -7,4 +7,14 @@ type ChannelsDetail = {
   lastUpload?: string
 }
 
-export { ChannelsDetail }
+type MoviesInfo = {
+  id: string
+  url: string
+  title: string
+  channelId: string
+  uploadAt: string
+  desc: string
+  thumbnails: string
+}
+
+export { ChannelsDetail, MoviesInfo }

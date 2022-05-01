@@ -36,16 +36,16 @@ async function getChannels(cId: string) {
   return res.data
 }
 
-async function getPlaylist(pId: string, part: string = 'snippet') {
+async function getPlaylistItem(pId: string, part: string = 'snippet', maxResults = 1) {
   const res = await api.get('/playlistItems', {
     params: {
       playlistId: pId,
       part: part,
-      maxResults: 1,
+      maxResults: maxResults,
     },
   })
 
   return res.data
 }
 
-export { serch, getChannels, getPlaylist }
+export { serch, getChannels, getPlaylistItem }
