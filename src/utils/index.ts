@@ -21,9 +21,9 @@ function addChannelUrl(data: ChannelsDetail[]): ChannelsDetail[] {
  * CSVを作る
  * @param data
  */
-function createCSV(data: any[]) {
+function createCSV(data: any[], filename = 'result') {
   stringify(data, { header: true }, (err, output) => {
-    fs.writeFile('src/res/result.csv', output, successWriteFile)
+    fs.writeFile(`src/res/${filename}.csv`, output, successWriteFile)
   })
 }
 

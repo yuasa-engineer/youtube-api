@@ -69,7 +69,7 @@ function getTags(data: MoviesInfo[]) {
   })
 }
 
-// Usecase('ホラー')
+// Usecase('怖い 考察')
 
 // getTags(moviesInfo)
 // const a = getTags(moviesInfo)
@@ -80,7 +80,7 @@ function getTags(data: MoviesInfo[]) {
 const createTagsCsv = async () => {
   const moviesInfo = await getMoviesInfoFromChannelsDetail(channelDetail)
   const tags = getTags(moviesInfo)
-  createCSV(tags)
+  createCSV(tags, 'tags')
 }
 
 createTagsCsv()
